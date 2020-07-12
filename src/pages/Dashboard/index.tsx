@@ -44,6 +44,12 @@ const Dashboard: React.FC = () => {
         balance: balanceResponse,
       } = await (await api.get('transactions')).data;
 
+      const balanceFormatted = {
+        income: formatValue(balanceResponse.income),
+        outcome: formatValue(balanceResponse.outcome),
+        total: formatValue(balanceResponse.total),
+      };
+      setBalance(balanceFormatted);
       const transactionsFormatted = transactionsResponse.map(
         (transaction: Transaction) => ({
           ...transaction,
@@ -56,7 +62,6 @@ const Dashboard: React.FC = () => {
       );
 
       setTransactions(transactionsFormatted);
-      setBalance(balanceResponse);
     }
 
     loadTransactions();
@@ -72,27 +77,21 @@ const Dashboard: React.FC = () => {
               <p>Entradas</p>
               <img src={income} alt="Income" />
             </header>
-            <h1 data-testid="balance-income">
-              {`R$ ${formatValue(parseFloat(balance.income))}`}
-            </h1>
+            <h1 data-testid="balance-income">{balance.income}</h1>
           </Card>
           <Card>
             <header>
               <p>Saídas</p>
               <img src={outcome} alt="Outcome" />
             </header>
-            <h1 data-testid="balance-outcome">
-              {`R$ ${formatValue(parseFloat(balance.outcome))}`}
-            </h1>
+            <h1 data-testid="balance-outcome">{balance.outcome}</h1>
           </Card>
           <Card total>
             <header>
               <p>Total</p>
               <img src={total} alt="Total" />
             </header>
-            <h1 data-testid="balance-total">
-              {`R$ ${formatValue(parseFloat(balance.total))}`}
-            </h1>
+            <h1 data-testid="balance-total">{balance.total}</h1>
           </Card>
         </CardContainer>
 
