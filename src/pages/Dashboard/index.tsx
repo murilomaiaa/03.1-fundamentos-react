@@ -33,6 +33,10 @@ const Dashboard: React.FC = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [balance, setBalance] = useState<Balance>({} as Balance);
 
+  function formatValueField(type: string, value: number): string {
+    return `${type === 'outcome' ? ' - ' : ''} ${formatValue(value)}`;
+  }
+
   useEffect(() => {
     async function loadTransactions(): Promise<void> {
       const {
@@ -40,7 +44,18 @@ const Dashboard: React.FC = () => {
         balance: balanceResponse,
       } = await (await api.get('transactions')).data;
 
-      setTransactions(transactionsResponse);
+      const transactionsFormatted = transactionsResponse.map(
+        (transaction: Transaction) => ({
+          ...transaction,
+          formattedValue: formatValueField(transaction.type, transaction.value),
+          // formattedValue: formatValue(transaction.value),
+          formattedDate: new Date(transaction.created_at).toLocaleDateString(
+            'pt-br',
+          ),
+        }),
+      );
+
+      setTransactions(transactionsFormatted);
       setBalance(balanceResponse);
     }
 
@@ -98,15 +113,10 @@ const Dashboard: React.FC = () => {
                   <tr key={transaction.id}>
                     <td className="title">{transaction.title}</td>
                     <td className={transaction.type}>
-                      {transaction.type === 'outcome' && ' - '}
-                      {formatValue(transaction.value)}
+                      {transaction.formattedValue}
                     </td>
                     <td>{transaction.category.title}</td>
-                    <td>
-                      {new Date(transaction.created_at).toLocaleDateString(
-                        'pt-br',
-                      )}
-                    </td>
+                    <td>{transaction.formattedDate}</td>
                   </tr>
                 ))}
             </tbody>
