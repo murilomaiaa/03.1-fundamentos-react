@@ -25,14 +25,17 @@ const Import: React.FC = () => {
   async function handleUpload(): Promise<void> {
     if (!uploadedFiles.length) return;
 
-    const data = new FormData();
+    const fileData = new FormData();
     const [file] = uploadedFiles;
 
-    data.append('file', file.file, file.name);
+    fileData.append('file', file.file, file.name);
 
     try {
-      const res = await api.post('/transactions/import', data);
-      console.log(res);
+      const { data } = await api.post('/transactions/import', fileData);
+      console.log(data);
+
+      const emptyFiles: FileProps[] = [];
+      setUploadedFiles(emptyFiles);
     } catch (err) {
       console.log(err.response.error);
     }
