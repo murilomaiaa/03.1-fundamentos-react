@@ -21,6 +21,11 @@ export const ImportFileContainer = styled.section`
   margin-top: 40px;
   border-radius: 5px;
   padding: 64px;
+
+  span {
+    font-size: 12px;
+    color: #e83f5b;
+  }
 `;
 
 export const Footer = styled.section`
