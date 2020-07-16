@@ -52,6 +52,7 @@ const Import: React.FC = () => {
       readableSize: filesize(file.size),
     }));
 
+    setEmptySubmit(false);
     setUploadedFiles(uploadFiles);
   }
 
